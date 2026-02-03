@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf</title>
+</head>
+<body>
+    <h1>Bienvenue sur Bookshelf, {{ username }}!</h1>
+
+
+
+
+        {% with messages = get_flashed_messages() %}
+        {% for msg in messages %}
+            <div class="flash">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="post">
+        <input type="text" name="query" placeholder="Rechercher un livre">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <a href="{{ url_for('new_book')}}">Ajouter un livre</a>
+
+<h2>Ma Bibliothèque</h2>
+
+<ul>
+    {% for book in books %}
+        <li>
+            <strong>{{ book.title }}</strong> par <em>{{ book.author }}</em> (ID: {{ book.id }}) 
+            <a href="{{ url_for('edit_book', book_id=book.id) }}">Modifier</a>
+            <a href="{{ url_for('delete_confirm', book_id=book.id) }}">Supprimer</a>
+            <a href="{{ url_for('book', book_id=book.id) }}">Voir</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<nav>
+    {% if page > 1 %}
+        <a href="{{ url_for('home', page=page-1) }}">Précédent</a>
+    {% endif %}
+
+    <span>Page {{ page }} sur {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('home', page=page+1) }}">Suivant</a>
+    {% endif %}
+</nav>
+    <a href="{{ url_for('logout') }}">Se déconnecter</a>
+</body>
+</html>
