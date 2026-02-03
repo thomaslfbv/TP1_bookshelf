@@ -33,7 +33,7 @@ def login_required(view):
 def home():
     query = request.form.get("query", "").strip()
     result = [element for element in BOOKS if query.lower() in element["title"].lower() or query.lower() in element["author"].lower()]
-##Recherche par auteur et par titre ! Cela évite de créer un filtre.
+##Recherche par auteur et par titre  Cela m'évite de créer un filtre.
 
 
 
@@ -52,24 +52,18 @@ def home():
 @app.route("/edit/<int:book_id>", methods=["GET", "POST"])
 @login_required
 def edit_book(book_id):
-    # 1. On cherche le livre dans la liste BOOKS par son ID
-    # On utilise next() avec une compréhension pour extraire le premier résultat trouvé
     book = next((b for b in BOOKS if b["id"] == book_id), None)
 
-    # Si le livre n'existe pas, on peut renvoyer une erreur 404
     if book is None:
         return "Livre non trouvé", 404
 
     if request.method == "POST":
-        # 2. On récupère les nouvelles données du formulaire
-        # Note : on utilise request.form car c'est un envoi POST
+
         book["title"] = request.form.get("title")
         book["author"] = request.form.get("author")
         book["description"] = request.form.get("description")
-        # 3. Une fois mis à jour, on redirige vers l'accueil
         return redirect(url_for("home"))
 
-    # 4. Si c'est un GET, on affiche le formulaire avec les infos du livre
     return render_template("edit.html", book=book)
 
 @login_required
@@ -129,10 +123,11 @@ def login():
 
     return render_template('login.html')
 
+
+
 @app.route("/delete-confirm/<int:book_id>")
 @login_required
 def delete_confirm(book_id):
-    # On cherche le livre comme pour l'édition
     book = next((b for b in BOOKS if b["id"] == book_id), None)
     if book is None:
         return render_template("404.html"), 404
