@@ -66,8 +66,8 @@ def edit_book(book_id):
 
     return render_template("edit.html", book=book)
 
-@login_required
 @app.get("/book/<int:book_id>")
+@login_required
 def book(book_id):
     book = next((b for b in BOOKS if b["id"] == book_id), None)
     return render_template("book.html", book=book)
