@@ -72,6 +72,7 @@ def book(book_id):
     book = next((b for b in BOOKS if b["id"] == book_id), None)
     return render_template("book.html", book=book)
 
+
 @app.route("/delete/<int:book_id>")
 @login_required
 def delete_book(book_id):
@@ -83,8 +84,8 @@ def delete_book(book_id):
     return redirect(url_for("home"))
 
 
-@login_required
 @app.route("/books/new", methods=["GET","POST"])
+@login_required
 def new_book():
     global NEXT_ID
     if request.method == "GET":
