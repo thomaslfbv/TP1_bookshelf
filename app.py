@@ -52,8 +52,9 @@ def home():
 @app.route("/edit/<int:book_id>", methods=["GET", "POST"])
 @login_required
 def edit_book(book_id):
-    book = next((b for b in BOOKS if b["id"] == book_id), None)
-
+    for b in BOOKS:
+        if b["id"] == book_id:
+            book = b
     if book is None:
         return "Livre non trouvé", 404
 
@@ -108,7 +109,7 @@ DEMO_USER = {"username": "admin", "password": "admin"}
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'username' in session:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -146,13 +147,19 @@ def logout():
 
 
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
+
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("500.html"), 500
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=DEBUG, host="127.0.0.1", port=PORT)
